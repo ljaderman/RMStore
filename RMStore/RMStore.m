@@ -146,6 +146,8 @@ typedef void (^RMStoreSuccessBlock)();
     void (^_restoreTransactionsFailureBlock)(NSError* error);
     void (^_restoreTransactionsSuccessBlock)(NSArray* transactions);
 }
+@synthesize productsRequest; // keep strong ref per apple docs
+
 
 - (instancetype) init
 {
@@ -155,6 +157,7 @@ typedef void (^RMStoreSuccessBlock)();
         _products = [NSMutableDictionary dictionary];
         _productsRequestDelegates = [NSMutableSet set];
         _restoredTransactions = [NSMutableArray array];
+	productsRequest = nil;
         [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
     }
     return self;
@@ -239,7 +242,7 @@ typedef void (^RMStoreSuccessBlock)();
     delegate.failureBlock = failureBlock;
     [_productsRequestDelegates addObject:delegate];
  
-    SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:identifiers];
+    productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:identifiers];
 	productsRequest.delegate = delegate;
     
     [productsRequest start];
@@ -770,6 +773,7 @@ typedef void (^RMStoreSuccessBlock)();
 - (void)requestDidFinish:(SKRequest *)request
 {
     [self.store removeProductsRequestDelegate:self];
+    productsRequest = nil;
 }
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error
@@ -786,6 +790,7 @@ typedef void (^RMStoreSuccessBlock)();
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:RMSKProductsRequestFailed object:self.store userInfo:userInfo];
     [self.store removeProductsRequestDelegate:self];
+    productsRequest = nil;
 }
 
 @end
