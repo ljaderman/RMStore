@@ -158,6 +158,12 @@ extern NSInteger const RMStoreErrorCodeUnableToCompleteVerification;
  */
 @property (nonatomic, weak) id<RMStoreTransactionPersistor> transactionPersistor;
 
+/**
+Need to keep a strong reference to SKProductsRequest per https://developer.apple.com/documentation/storekit/skproductsrequest?language=objc
+to avoid system freeing request before it can complete
+*/
+@property (nonatomic, strong) SKProductsRequest * productsRequest;
+
 
 #pragma mark Product management
 ///---------------------------------------------
