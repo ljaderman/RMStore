@@ -773,7 +773,7 @@ typedef void (^RMStoreSuccessBlock)();
 - (void)requestDidFinish:(SKRequest *)request
 {
     [self.store removeProductsRequestDelegate:self];
-    productsRequest = nil;
+    self.store.productsRequest = nil;
 }
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error
@@ -790,7 +790,7 @@ typedef void (^RMStoreSuccessBlock)();
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:RMSKProductsRequestFailed object:self.store userInfo:userInfo];
     [self.store removeProductsRequestDelegate:self];
-    productsRequest = nil;
+    self.store.productsRequest = nil;
 }
 
 @end
