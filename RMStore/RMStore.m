@@ -684,6 +684,7 @@ typedef void (^RMStoreSuccessBlock)();
 - (void)requestDidFinish:(SKRequest *)request
 {
     RMStoreLog(@"refresh receipt finished");
+    [_refreshReceiptRequest cancel];
     _refreshReceiptRequest = nil;
     if (_refreshReceiptSuccessBlock)
     {
